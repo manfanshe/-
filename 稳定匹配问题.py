@@ -7,9 +7,9 @@ class people:
         self.pid = pid
 
 class woman(people):
-    boyfriend_id = -1
-    def __init__(self, pid):
-        people.__init__(self, pid)
+    def __init__(self, pid,boyfriend_id = -1):
+        self.pid=pid
+        self.boyfriend_id=boyfriend_id
     def any_man_score(self,man_id):
         if man_id < 0:
             return 0
@@ -27,10 +27,10 @@ class woman(people):
 
 
 class man(people):
-    is_single = 1
-    girlfriend_id = -1
-    def __init__(self, pid):
-        people.__init__(self, pid)
+    def __init__(self, pid,is_single=1,girlfriend_id=-1):
+        self.pid = pid 
+        self.is_single = is_single
+        self.girlfriend_id = girlfriend_id
     def any_woman_score(woman_id):
         if woman_id < 0:
             return 0
@@ -65,9 +65,20 @@ m_w_score = np.random.rand(n, n)
 w_m_score = np.random.rand(n, n)
 
 
-for i in range(k):
-    M_rest = [j for j in M if man(j).is_single==1]
-    man(M_rest[0]).find_girlfriend()
+M_rest = [x for x in M if man(x).is_single==1]
+for j in M_rest:
+    the_man = man(j)
+    the_man.find_girlfriend()
 
+
+self_pid=9
+perfer_list = m_w_score[self_pid]
+possible_list = m_w_score[self_pid]
+max_index = 100
+man(9).girlfriend_id = max_index
+man(9).is_single=0
+print(self_pid,'的女朋友是：',self.girlfriend_id)
+print('男生的喜欢程度是：',max(possible_list))
+print('女生的喜欢程度是：',woman(self.girlfriend_id).any_man_score(self_pid))
 
 
