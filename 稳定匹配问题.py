@@ -13,6 +13,7 @@ class woman(people):
         people.__init__(self, pid)
         woman_dict.setdefault(pid,{})
         woman_dict[pid].setdefault('friend_id',-1)
+        woman_dict[pid].setdefault('times',0)
         # self.boyfriend_id=boyfriend_id
     def any_man_score(self,man_id):
         if man_id == -1:
@@ -22,6 +23,7 @@ class woman(people):
             return perfer_list[man_id]
     def compare_with_nowchoice(self,man_id):
         friend_id = woman_dict[self.pid]['friend_id']
+        woman_dict[self.pid]['times'] = woman_dict[self.pid]['times']+1
         if self.any_man_score(man_id) > self.any_man_score(friend_id):
             woman_dict[self.pid]['friend_id'] = man_id    # 女生换新男友
             # print(self.pid,'的男朋友更新为：',man_id)
@@ -37,6 +39,7 @@ class man(people):
         people.__init__(self, pid)
         man_dict.setdefault(pid,{})
         man_dict[pid].setdefault('friend_id',-1)
+        man_dict[pid].setdefault('times',0)
     def any_woman_score(self,woman_id):
         if woman_id < 0:
             return 0
@@ -49,6 +52,7 @@ class man(people):
         while man_dict[self.pid]['friend_id'] == -1:
             max_index = perfer_list.index(max(possible_list))
             print(self.pid,'追求',max_index)
+            man_dict[self.pid]['times'] = man_dict[self.pid]['times']+1
             if woman(max_index).compare_with_nowchoice(self.pid) == 1: #求爱成功
                 man_dict[self.pid]['friend_id'] = max_index  #确定女朋友
                 print(self.pid,'的女朋友更新为：',max_index)
@@ -84,6 +88,16 @@ df_result['w_m_score'] = df_result[['man_id','woman_id']].apply(lambda x:w_m_sco
 ## 满意度分布
 df_result['m_w_score'].hist()
 df_result['w_m_score'].hist()
+
+## 到达稳定状态的接触次数
+pd.Series([x['times'] for x in man_dict.values()]).hist()
+pd.Series([x['times'] for x in woman_dict.values()]).hist()
+
+# 如果主动有成本
+
+
+
+
 
 
 
